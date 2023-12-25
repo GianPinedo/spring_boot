@@ -1,7 +1,10 @@
 package com.blogapp.apis.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api")
 public class PostController {
+
+	Logger logger = LoggerFactory.getLogger(PostController.class);
 
 	@Autowired
 	private PostService postService;
@@ -113,22 +118,38 @@ public class PostController {
 
 		try {
 			if (multipartFile.isEmpty()) {
-				ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("emplty file not allowed");
+				ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("empty file not allowed");
 			}
-			
+
 			boolean isFileUploaded = fileService.uploadFile(multipartFile);
+			System.out.println("file name : " + multipartFile.getOriginalFilename());
 			if (isFileUploaded) {
 				postDto.setImageName(multipartFile.getOriginalFilename());
 				postService.updatePost(postDto, postId);
-				
+
 				return ResponseEntity.ok(ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/")
 						.path(multipartFile.getOriginalFilename()).toUriString());
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("something went wrong ###");
 	}
 
+	
+	@PostMapping("/multiple-file-upload")
+	@ResponseBody
+	public ResponseEntity<String> multipleFilesUpload(@RequestParam("file_key") MultipartFile[] multipartFileArray) {
+		logger.info("number of files = {} ", multipartFileArray.length);
+		if (multipartFileArray.length > 0) {
+			List<MultipartFile> fileList = Arrays.asList(multipartFileArray);
+			fileList.forEach(file -> {
+				logger.info("File name = {} ", file.getOriginalFilename());
+				logger.info("File type = {} ", file.getContentType());
+				logger.info("=============================================");
+			});
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("All files uploaded successfully");
+	}
 }

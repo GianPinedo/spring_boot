@@ -11,8 +11,7 @@ import com.blogapp.apis.exceptions.ResourceNotFindException;
 import com.blogapp.apis.repositories.UserRepository;
 
 @Service
-public class CustomUserDetailService implements UserDetailsService
-{
+public class CustomUserDetailService implements UserDetailsService{
 
 	@Autowired
 	private UserRepository userRepository;

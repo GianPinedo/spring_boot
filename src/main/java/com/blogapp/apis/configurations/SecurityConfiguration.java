@@ -74,10 +74,10 @@ public class SecurityConfiguration {
 		 * .getSharedObject(AuthenticationManagerBuilder.class);
 		 * authenticationManagerBuilder.userDetailsService(customUserDetailService).
 		 * passwordEncoder(getPasswordEncoder());
-		 * 
 		 * //authenticationManager = authenticationManagerBuilder.build();
 		 * 
-		 * http.authorizeHttpRequests((authz) -> authz .anyRequest() .authenticated()
+		 * http
+		 * .authorizeHttpRequests((authz) -> authz .anyRequest() .authenticated()
 		 * .requestMatchers("/auth/login").permitAll()) .csrf().disable()
 		 * .exceptionHandling(ex ->
 		 * ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
@@ -94,17 +94,29 @@ public class SecurityConfiguration {
          .requestMatchers("/test").authenticated()
          //.requestMatchers("/auth/login").permitAll()
          .requestMatchers(allPublicPermitUrl).permitAll()
-         .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
+         //.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
+         .requestMatchers(HttpMethod.POST, "/**").permitAll()
+         .requestMatchers(HttpMethod.PUT, "/**").permitAll()
          .requestMatchers(HttpMethod.GET, "/**").permitAll()
          .anyRequest()
          .authenticated()
          .and().exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
          .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
  
+		 http.authenticationProvider(getAuthenicationProvider());
 		 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		 return http.build();
 		
 		
+	}
+	
+	@Bean
+	public DaoAuthenticationProvider getAuthenicationProvider() {
+		DaoAuthenticationProvider provider = 
+				new DaoAuthenticationProvider();
+		provider.setPasswordEncoder(getPasswordEncoder());
+		provider.setUserDetailsService(customUserDetailService);
+		return provider;
 	}
 
 	/*
