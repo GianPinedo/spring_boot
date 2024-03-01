@@ -69,24 +69,7 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		/*
-		 * AuthenticationManagerBuilder authenticationManagerBuilder = http
-		 * .getSharedObject(AuthenticationManagerBuilder.class);
-		 * authenticationManagerBuilder.userDetailsService(customUserDetailService).
-		 * passwordEncoder(getPasswordEncoder());
-		 * //authenticationManager = authenticationManagerBuilder.build();
-		 * 
-		 * http
-		 * .authorizeHttpRequests((authz) -> authz .anyRequest() .authenticated()
-		 * .requestMatchers("/auth/login").permitAll()) .csrf().disable()
-		 * .exceptionHandling(ex ->
-		 * ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-		 * .sessionManagement(session ->
-		 * session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		 * 
-		 * http.addFilterBefore(jwtAuthenticationFilter,
-		 * UsernamePasswordAuthenticationFilter.class); return http.build();
-		 */
+		
 		
 		
 		 http.csrf(csrf -> csrf.disable())

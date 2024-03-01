@@ -113,15 +113,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO RegistereUser(UserDTO userDto) {
 		User user = modelMapper.map(userDto, User.class);
-		
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		Role role = roleRepository.findById(AppConstants.USER_ROLE_ID).get();
-		
-		user.getRoleSet().add(role);
-		
+		//Role role = roleRepository.findById(AppConstants.USER_ROLE_ID).get();
+		//user.getRoleSet().add(role);
 		User newUser = userRepository.save(user);
-		
 		return modelMapper.map(newUser, UserDTO.class);
 	}
 	
