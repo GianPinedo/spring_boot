@@ -53,29 +53,30 @@ public class BlogApplication implements CommandLineRunner{
 	}
 	
 
+	@SuppressWarnings("null")
 	@Override
 	public void run(String... args) throws Exception {
-		try {
-			Role role1 = new Role();
-			role1.setId(AppConstants.ADMIN_ROLE_ID);
-			role1.setRoleName("ROLE_ADMIN");
+		// try {
+		// 	Role role1 = new Role();
+		// 	role1.setId(AppConstants.ADMIN_ROLE_ID);
+		// 	role1.setRoleName("ROLE_ADMIN");
 			
-			Role role2 = new Role();
-			role1.setId(AppConstants.USER_ROLE_ID);
-			role1.setRoleName("ROLE_USER");
+		// 	Role role2 = new Role();
+		// 	role2.setId(AppConstants.USER_ROLE_ID);
+		// 	role2.setRoleName("ROLE_USER");
 			
-			List<Role> roleList = List.of(role1, role2);
-			this.roleRepository.saveAll(roleList);
+		// 	List<Role> roleList = List.of(role1, role2);
+		// 	this.roleRepository.saveAll(roleList);
 			
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
+		// 	}catch (Exception e) {
+		// 		e.printStackTrace();
+		// 	}
 	}
 	
 	
 	
 	  @Bean public OpenAPI nexusOpenApi() { return new OpenAPI() .info(new
-	  io.swagger.v3.oas.models.info.Info().title("Title 1")
+	  io.swagger.v3.oas.models.info.Info().title("Basic API")
 	  .description("Description 1") .version("Version 1") .license(new
 	  io.swagger.v3.oas.models.info.License().name("(C) Copyright xxx").url(
 	  "http://www.example.com"))) .security(Collections.singletonList(new

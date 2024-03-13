@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class PostController {
 	@Autowired
 	private FileService fileService;
 
+	
 	@PostMapping("/user/{userId}/category/{categoryId}/posts")
 	public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto,
 			@PathVariable("userId") Integer userId, @PathVariable("categoryId") Integer categoryId) {
@@ -84,7 +86,10 @@ public class PostController {
 		return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
 	}
 
+    // require authentication
+
 	@GetMapping("posts")
+	@PreAuthorize("hasRole('ROLE_ADMIN')") // Requiere que el usuario tenga el rol ROLE_USER
 	public ResponseEntity<List<PostDto>> getAllPosts() {
 		List<PostDto> postDtoList = postService.getAllPost();
 
