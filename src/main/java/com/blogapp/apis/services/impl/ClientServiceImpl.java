@@ -35,7 +35,12 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public ClientDto updateClient(ClientDto clientDto, Integer clientId) {
-         Client client = modelMapper.map(clientDto, Client.class);
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> {
+            return new ResourceNotFindException("client", "clientId", clientId);
+        });
+        client.setClientName(clientDto.getClientName());
+        client.setClientEmail(clientDto.getClientEmail());
+        
         client = clientRepository.save(client);
         return modelMapper.map(client, ClientDto.class);
     }
@@ -51,15 +56,16 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public ClientDto getClient(Integer clientId) {
-         Client client = modelMapper.map(clientId, Client.class);
-        client = clientRepository.save(client);
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> {
+            return new ResourceNotFindException("client", "clientId", clientId);
+        });
         return modelMapper.map(client, ClientDto.class);
     }
 
     @Override
     public List<ClientDto> getAllClients() {
         
-
-        return clientRepository.findAll().stream().map(client -> modelMapper.map(client, ClientDto.class)).collect(Collectors.toList());
+        return clientRepository.findAll().stream().map(client -> 
+            modelMapper.map(client, ClientDto.class)).collect(Collectors.toList());
     }
 }
